@@ -1,53 +1,29 @@
-import React, {useState} from 'react'
+import React, {useState, useCallback} from 'react'
 import {View, Text, StyleSheet, StatusBar, TouchableOpacity} from 'react-native'
 
-export default function App() {
-  const [color, setColor] = useState('')
+const COLORS = ['white', 'black', 'blue', 'green', 'pink', 'red', 'purple', 'yellow', 'grey', 'lilac'];
 
-  function randomColor() {
-    const randomNumber = new Date().getTime()
-    const lastNumber = randomNumber.toString().charAt(12)
-  
-    switch(Number(lastNumber)) {
-      case 0:
-        return 'white'
-      case 1:
-        return 'black'
-      case 2:
-        return 'blue'
-      case 3:
-        return 'green'
-      case 4:
-        return 'pink'
-      case 5:
-        return 'red'
-      case 6:
-        return 'purple'
-      case 7:
-        return 'yellow'
-      case 8:
-        return 'grey'
-      case 9:
-        return 'lilac'
-    }
-  }
-  
-  function handleChangeColor() {
-    setColor(randomColor)
-  }
-  
+export default function App() {
+  const [color, setColor] = useState('white')
+
+  const randomColor = useCallback(() => {
+    const randomNumber = new Date().getTime();
+    const lastNumber = randomNumber.toString().slice(-1);
+    
+    setColor(COLORS[+lastNumber]);
+  }, [setColor]);
+
   return (
     <>
-    <StatusBar barStyle="light-content"/>
-  <View style={{backgroundColor: color, flex: 1}}>
-  </View>
+      <StatusBar barStyle="light-content"/>
+        <View style={{backgroundColor: color, flex: 1}} />
 
-  <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={handleChangeColor}>
-    <Text style={styles.buttonText}>
-      Toque para randomizar cor do fundo
-    </Text>
-  </TouchableOpacity>
-  </>
+      <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={randomColor}>
+        <Text style={styles.buttonText}>
+        Toque para randomizar cor do fundo
+        </Text>
+      </TouchableOpacity>
+    </>
   )
 }
 
